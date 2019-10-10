@@ -1,0 +1,30 @@
+Normally Athena WB canister will with 2 physical I2c adapter
+i2c-1   smbus           SMBus I801 adapter at 0780              SMBus adapter
+i2c-0   i2c             AST i2c bit bus                         I2C adapter
+
+But if we use stub i2c adapter in OS it will occur following situation:
+
+root@simon-Athena:~# modprobe i2c-stub
+[ 2025.273346] i2c-stub: Please specify a chip address
+modprobe: ERROR: could not insert 'i2c_stub': No such device
+root@simon-Athena:~# modprobe i2c-stub 0x1c
+[ 2030.596535] i2c-stub: Please specify a chip address
+modprobe: ERROR: could not insert 'i2c_stub': No such device
+root@simon-Athena:~# modprobe i2c-stub chip_addr=0x1c
+root@simon-Athena:~# i2cdetect -l
+i2c-1   smbus           SMBus stub driver                       SMBus adapter
+i2c-0   i2c             AST i2c bit bus                         I2C adapter
+root@simon-Athena:~# ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1
+root@simon-Athena:~# modprobe i2c_i801
+root@simon-Athena:~# ls /dev/i2c*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-2
+root@simon-Athena:~# i2cdetect -l
+i2c-1   smbus           SMBus stub driver                       SMBus adapter
+i2c-2   smbus           SMBus I801 adapter at 0780              SMBus adapter
+i2c-0   i2c             AST i2c bit bus                         I2C adapter
+root@simon-Athena:~#
+
+Now you will find i801 is i2c-2
+And calibration application and management application will fail when in this situation
+Correct way is to detect the i801 adapter at 0780 and get i2c-x,get this x and used as bus number.
