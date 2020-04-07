@@ -1,0 +1,10 @@
+[Unit]
+Description=send bbu data to BMC
+
+[Service]
+ExecStart=/home/taddeo/fortest_tmp/bbuapp_send_data_BMC
+#ExecStop=/home/taddeo/fortest_tmp/bbutest_disarm_bbu
+ExecStopPost=/home/taddeo/fortest_tmp/bbutest_disarm_bbu
+
+[Install]
+WantedBy=multi-user.target

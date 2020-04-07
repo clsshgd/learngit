@@ -1,0 +1,11 @@
+LINUXINCLUDE := -I$(src) $(LINUXINCLUDE)
+
+ifdef MODULE_NAME
+	SWITCHTEC_MODULE_NAME = $(MODULE_NAME)
+else
+	SWITCHTEC_MODULE_NAME = cls_switchtec
+endif
+$(SWITCHTEC_MODULE_NAME)-objs := switchtec.o switchtec_sg.o
+#obj-m :=$(SWITCHTEC_MODULE_NAME).o ntb_hw_switchtec.o
+obj-m :=$(SWITCHTEC_MODULE_NAME).o
+#ccflags-y := -Wall -Werror -Werror=implicit-function-declaration
